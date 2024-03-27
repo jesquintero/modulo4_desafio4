@@ -1,15 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-function Buscador({ search, onFilterChange }) {
+function Buscador({ setSearch }) {
+    const [valor, setValor] = useState('');
+
+    const handleSearch = (e) => {
+        setValor(e.target.value);
+        setSearch(e.target.value);
+    };
 
     return ( 
         <>
             <input
                 type="text"
-                placeholder="search"
+                placeholder="Buscar moneda"
                 className="form-control"
-                value={search}
-                onChange={e => onFilterChange(e.target.value)}
+                value={valor}
+                onChange={handleSearch}
             />
         </>
      );

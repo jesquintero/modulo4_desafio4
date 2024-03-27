@@ -4,6 +4,7 @@ import { Col, Table } from 'react-bootstrap';
 import Buscador from './Buscador';
 
 function MiApi() {
+    const [indicadores, setIndicadores] = useState([])
     const [info, setInfo] = useState([]);
     const [search, setSearch] = useState('');
 
@@ -19,26 +20,24 @@ function MiApi() {
             tipo: key
             };
         });
+        setIndicadores(listaIndicadores);
         setInfo(listaIndicadores);
     };
 
     useEffect(() => {
         getData();
     }, []);
-
-    //Filtrado de datos
-    let results = [];
-    if (!search) {
-        results = info;
-    } else {
-        results = info.filter((inf) =>
-        inf.name.toLowerCase().includes(search.toLowerCase())
+    
+    useEffect(()=> {
+        const results = indicadores.filter((indicador) =>
+        indicador.nombre.toLowerCase().includes(search.toLowerCase())
         );
-    } 
+        setInfo(results)
+    }, [search, indicadores])
 
     return ( 
         <Col>
-            <Buscador search={search} onFilterChange={setSearch} />
+            <Buscador setSearch={setSearch} />
             <Table striped bordered className='mt-2'>
                 <thead>
                     <tr>
@@ -48,7 +47,7 @@ function MiApi() {
                     </tr>
                 </thead>
                 <tbody>
-                    {results.map((elem, index)=> (
+                    {info.map((elem)=> (
                         <tr key={elem.codigo}>
                             <td>{elem.nombre}</td>
                             <td>{elem.unidad_medida}</td>
@@ -57,7 +56,7 @@ function MiApi() {
                     ))}                     
                 </tbody>
             </Table>
-            {console.log(results)}
+            {console.log(info)}
             
         </Col>
      );
